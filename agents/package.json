@@ -1,0 +1,10 @@
+{
+  "name": "agents",
+  "version": "0.1.0",
+  "type": "commonjs",
+  "scripts": {
+    "dev": "ts-node src/watcher.ts",
+    "build": "tsc -p .",
+    "start": "node dist/watcher.js"
+  }
+}
