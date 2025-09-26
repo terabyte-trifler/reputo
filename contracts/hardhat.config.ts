@@ -12,7 +12,7 @@ const ACCOUNTS = PRIV_KEY ? [PRIV_KEY] : [];
 const config: HardhatUserConfig = {
   solidity: {
     version: "0.8.24",
-    settings: { optimizer: { enabled: true, runs: 200 } },
+    settings: { optimizer: { enabled: true, runs: 200 }, viaIR: true },
   },
   networks: {
     sepolia: {

@@ -1,15 +1,27 @@
-
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.24;
 
-/// @notice Placeholder. Day 5 we'll connect Self Protocol proof verification.
-contract IdentityVerifier {
-    mapping(address => bool) public verifiedHuman;
+import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 
-    event UserVerified(address indexed user);
+contract IdentityVerifier is Ownable {
+    mapping(address => bool) private _verified;
 
-    function adminMarkVerified(address user, bool ok) external {
-        verifiedHuman[user] = ok;
-        if (ok) emit UserVerified(user);
+    event UserVerified(address indexed user, bool status);
+
+    constructor() Ownable(msg.sender) {}
+
+    // Day 5: replace this with Self zk verification call.
+    function verifyIdentity(bytes calldata /*zkProof*/) external {
+        _verified[msg.sender] = true;
+        emit UserVerified(msg.sender, true);
+    }
+
+    function adminSetVerified(address user, bool ok) external onlyOwner {
+        _verified[user] = ok;
+        emit UserVerified(user, ok);
+    }
+
+    function isVerified(address user) external view returns (bool) {
+        return _verified[user];
     }
 }
