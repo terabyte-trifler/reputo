@@ -1,10 +1,40 @@
-import { ethers } from "hardhat";
+/// <reference types="hardhat" />
+import hre from "hardhat";
+import fs from "node:fs";
+import path from "node:path";
+import type { Signer } from "ethers";
 
 async function main() {
-  const [deployer] = await ethers.getSigners();
-  console.log("Deployer:", deployer.address);
+  console.log("Starting deploy script under Hardhat:", true);
 
-  // 1) Deploy tokens
+  console.log("hre keys:", Object.keys(hre));
+  console.log("typeof hre.ethers:", typeof (hre as any).ethers);
+
+  if (!(hre as any).ethers) {
+    console.error("ERROR: hre.ethers is undefined. Ensure @nomicfoundation/hardhat-ethers is installed and imported.");
+    process.exit(1);
+  }
+
+  const ethers = (hre as any).ethers;
+  const network = hre.network;
+
+  // ---------- helpers ----------
+  const writeDeployment = (net: string, data: Record<string, string>) => {
+    const dir = path.join(process.cwd(), "deployments");
+    const file = path.join(dir, `${net}.json`);
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir);
+    fs.writeFileSync(file, JSON.stringify(data, null, 2));
+    console.log(`\nSaved addresses to: ${file}`);
+  };
+
+  const one = (n: string) => ethers.parseEther(n);
+
+  const signers = await ethers.getSigners();
+  const [deployer]: Signer[] = signers;
+  console.log(`Network: ${(network as any).name ?? "unknown"}`);
+  console.log(`Deployer: ${(deployer as any)?.address}\n`);
+
+  // ---------- 1) Tokens ----------
   const Token = await ethers.getContractFactory("TestToken");
 
   const cWETH = await Token.deploy("Collateral WETH", "cWETH", 18);
@@ -17,7 +47,7 @@ async function main() {
   const tUSDCAddr = await tUSDC.getAddress();
   console.log("tUSDC:", tUSDCAddr);
 
-  // 2) Deploy Identity + OCCR + Pool
+  // ---------- 2) Identity + OCCR + Pool ----------
   const Identity = await ethers.getContractFactory("IdentityVerifier");
   const identity = await Identity.deploy();
   await identity.waitForDeployment();
@@ -25,36 +55,48 @@ async function main() {
   console.log("IdentityVerifier:", identityAddr);
 
   const OCCR = await ethers.getContractFactory("OCCRScore");
-  const occr = await OCCR.deploy(deployer.address);
+  const occr = await OCCR.deploy((deployer as any).address);
   await occr.waitForDeployment();
   const occrAddr = await occr.getAddress();
   console.log("OCCRScore:", occrAddr);
 
   const Pool = await ethers.getContractFactory("LendingPool");
-  const pool = await Pool.deploy(cWETHAddr, tUSDCAddr, deployer.address);
+  const pool = await Pool.deploy(cWETHAddr, tUSDCAddr, (deployer as any).address);
   await pool.waitForDeployment();
   const poolAddr = await pool.getAddress();
   console.log("LendingPool:", poolAddr);
 
-  // 3) Wire refs
-  const poolSet = await pool.setRefs(occrAddr, identityAddr);
-  await poolSet.wait();
+  // ---------- 3) Wire references ----------
+  await (await pool.setRefs(occrAddr, identityAddr)).wait();
+  await (await occr.setPool(poolAddr, poolAddr)).wait();
+  console.log("Refs wired (pool <-> occr, identity).");
 
-  const setPool = await occr.setPool(poolAddr, poolAddr);
-  await setPool.wait();
+  // ---------- 4) Seed balances for demo ----------
+  await (await cWETH.mint((deployer as any).address, one("100"))).wait();
+  await (await tUSDC.mint(poolAddr, one("100000"))).wait();
+  console.log("Seeded: 100 cWETH to user, 100k tUSDC to pool.");
 
-  // 4) Seed liquidity and user balances for demo
-  // mint collateral to user
-  await (await cWETH.mint(deployer.address, ethers.parseEther("100"))).wait();
+  // ---------- 5) Set demo price (collateral -> debt) ----------
+  await (await pool.setPrice(one("2000"))).wait();
+  console.log("Set price = 2000 (collateral->debt).");
 
-  // mint debt liquidity to pool
-  await (await tUSDC.mint(poolAddr, ethers.parseEther("100000"))).wait();
+  // ---------- 6) Output ----------
+  const addrs = {
+    network: (network as any).name ?? "unknown",
+    deployer: (deployer as any).address,
+    cWETH: cWETHAddr,
+    tUSDC: tUSDCAddr,
+    IdentityVerifier: identityAddr,
+    OCCRScore: occrAddr,
+    LendingPool: poolAddr,
+  };
 
-  // 5) (Optional) set price (collateral->debt)
-  await (await pool.setPrice(ethers.parseEther("2000"))).wait();
-
-  console.log("DONE. Save addresses:");
-  console.log({ cWETHAddr, tUSDCAddr, identityAddr, occrAddr, poolAddr });
+  console.log("\nDONE. Save these addresses:");
+  console.log(addrs);
+  writeDeployment((network as any).name ?? "unknown", addrs);
 }
 
-main().catch((e) => { console.error(e); process.exit(1); });
+main().catch((e) => {
+  console.error("Script failed:", e);
+  process.exit(1);
+});

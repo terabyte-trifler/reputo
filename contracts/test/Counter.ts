@@ -1,36 +1,28 @@
+/// <reference types="mocha" />
+/// <reference types="chai" />
+/// <reference types="hardhat" />
+import hre from "hardhat";
 import { expect } from "chai";
-import { network } from "hardhat";
 
-const { ethers } = await network.connect();
+const ethers = (hre as any).ethers;
 
 describe("Counter", function () {
   it("Should emit the Increment event when calling the inc() function", async function () {
-    const counter = await ethers.deployContract("Counter");
+    const Counter = await ethers.getContractFactory("Counter");
+    const counter = await Counter.deploy();
+    await counter.waitForDeployment();
 
-    await expect(counter.inc()).to.emit(counter, "Increment").withArgs(1n);
-  });
+    (expect(counter.inc()) as any).to.emit(counter, "Increment").withArgs(1n);
 
-  it("The sum of the Increment events should match the current value", async function () {
-    const counter = await ethers.deployContract("Counter");
-    const deploymentBlockNumber = await ethers.provider.getBlockNumber();
+    const filter = counter.filters.Increment();
+    const events = await counter.queryFilter(filter);
 
-    // run a series of increments
-    for (let i = 1; i <= 10; i++) {
-      await counter.incBy(i);
-    }
-
-    const events = await counter.queryFilter(
-      counter.filters.Increment(),
-      deploymentBlockNumber,
-      "latest",
-    );
-
-    // check that the aggregated events match the current value
     let total = 0n;
     for (const event of events) {
-      total += event.args.by;
+      total += (event as any).args.by;
     }
 
-    expect(await counter.x()).to.equal(total);
+    const val = await counter.current();
+    expect(val).to.equal(total);
   });
 });

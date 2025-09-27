@@ -2,25 +2,27 @@
   "name": "contracts",
   "version": "1.0.0",
   "type": "module",
+  "private": true,
   "scripts": {
-    "compile": "hardhat compile",
+    "hardhat": "hardhat",
     "clean": "hardhat clean",
+    "compile": "hardhat compile",
     "test": "hardhat test",
     "deploy:sepolia": "hardhat run scripts/deploy.ts --network sepolia"
   },
   "devDependencies": {
-    "@types/chai": "^4.3.20",
+    "@nomicfoundation/hardhat-ethers": "^4.0.1",
+    "@types/chai": "^5.2.2",
     "@types/mocha": "^10.0.10",
-    "@types/node": "^20.11.19",
-    "chai": "^4.5.0",
-    "dotenv": "^16.4.0",
-    "hardhat": "^3.0.6",
-    "mocha": "^10.8.2",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.3.3"
+    "@types/node": "20.11.19",
+    "chai": "^6.0.1",
+    "dotenv": "16.4.0",
+    "hardhat": "3.0.6",
+    "ts-node": "10.9.2",
+    "typescript": "5.3.3"
   },
   "dependencies": {
-    "@openzeppelin/contracts": "^5.4.0",
+    "@openzeppelin/contracts": "5.0.2",
     "ethers": "^6.15.0"
   }
 }
