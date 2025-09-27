@@ -11,8 +11,7 @@
     "deploy:sepolia": "hardhat run scripts/deploy.ts --network sepolia"
   },
   "devDependencies": {
-    "@1inch/limit-order-protocol-contract": "^4.3.3",
-    "@1inch/limit-order-protocol-utils": "^4.0.1",
+    "@1inch/limit-order-protocol-contract": "github:1inch/limit-order-protocol",
     "@nomicfoundation/hardhat-ethers": "^4.0.1",
     "@types/chai": "^5.2.2",
     "@types/mocha": "^10.0.10",
@@ -24,6 +23,7 @@
     "typescript": "5.3.3"
   },
   "dependencies": {
+    "@1inch/limit-order-protocol-utils": "^4.0.1",
     "@openzeppelin/contracts": "5.0.2",
     "aptos": "^1.21.0",
     "axios": "^1.12.2",

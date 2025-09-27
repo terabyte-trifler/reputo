@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@1inch/limit-order-protocol-utils':
+        specifier: ^4.0.1
+        version: 4.0.1(bufferutil@4.0.9)(ts-node@10.9.2(@types/node@20.11.19)(typescript@5.3.3))(typescript@5.3.3)(utf-8-validate@5.0.10)
       '@openzeppelin/contracts':
         specifier: 5.0.2
         version: 5.0.2
@@ -22,11 +25,8 @@ importers:
         version: 5.8.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)
     devDependencies:
       '@1inch/limit-order-protocol-contract':
-        specifier: ^4.3.3
-        version: 4.3.3(bufferutil@4.0.9)(ethers@5.8.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(ts-node@10.9.2(@types/node@20.11.19)(typescript@5.3.3))(typescript@5.3.3)(utf-8-validate@5.0.10)
-      '@1inch/limit-order-protocol-utils':
-        specifier: ^4.0.1
-        version: 4.0.1(bufferutil@4.0.9)(ts-node@10.9.2(@types/node@20.11.19)(typescript@5.3.3))(typescript@5.3.3)(utf-8-validate@5.0.10)
+        specifier: github:1inch/limit-order-protocol
+        version: https://codeload.github.com/1inch/limit-order-protocol/tar.gz/2f08226c2890abba2f35646cbfc07aa7eeabd736(bufferutil@4.0.9)(ethers@5.8.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(ts-node@10.9.2(@types/node@20.11.19)(typescript@5.3.3))(typescript@5.3.3)(utf-8-validate@5.0.10)
       '@nomicfoundation/hardhat-ethers':
         specifier: ^4.0.1
         version: 4.0.1(bufferutil@4.0.9)(hardhat@3.0.6(bufferutil@4.0.9)(utf-8-validate@5.0.10))(utf-8-validate@5.0.10)
@@ -57,8 +57,9 @@ importers:
 
 packages:
 
-  '@1inch/limit-order-protocol-contract@4.3.3':
-    resolution: {integrity: sha512-6XMwL0+s763I8WWLnRT/pqtnp8vZYUhKFMnM5BJ9TpahC1tydnEE6arihQZd8LG9gJbXMFtJtmAr4Ay3Iks5CQ==}
+  '@1inch/limit-order-protocol-contract@https://codeload.github.com/1inch/limit-order-protocol/tar.gz/2f08226c2890abba2f35646cbfc07aa7eeabd736':
+    resolution: {tarball: https://codeload.github.com/1inch/limit-order-protocol/tar.gz/2f08226c2890abba2f35646cbfc07aa7eeabd736}
+    version: 4.3.3
 
   '@1inch/limit-order-protocol-utils@4.0.1':
     resolution: {integrity: sha512-fnCdVT/rt1s3KM5GQjbM1u84y0lJIZRltczyU9t+K4biTL0rYCj5iaVKxWbxUV6Wd/aAJHLMOE0PEsZ2fgYLtA==}
@@ -863,9 +864,6 @@ packages:
 
   '@openzeppelin/contracts-upgradeable@4.7.3':
     resolution: {integrity: sha512-+wuegAMaLcZnLCJIvrVUDzA9z/Wp93f0Dla/4jJvIhijRrPabjQbZe6fWiECLaJyfn5ci9fqf9vTw3xpQOad2A==}
-
-  '@openzeppelin/contracts-upgradeable@4.9.6':
-    resolution: {integrity: sha512-m4iHazOsOCv1DgM7eD7GupTJ+NFVujRZt1wzddDPSVGpWdKq1SKkla5htKG7+IS4d2XOCtzkUNwRZ7Vq5aEUMA==}
 
   '@openzeppelin/contracts@3.4.2':
     resolution: {integrity: sha512-z0zMCjyhhp4y7XKAcDAi3Vgms4T2PstwBdahiO0+9NaGICQKjynK3wduSRplTgk4LXmoO1yfDGO5RbjKYxtuxA==}
@@ -3552,7 +3550,7 @@ packages:
 
 snapshots:
 
-  '@1inch/limit-order-protocol-contract@4.3.3(bufferutil@4.0.9)(ethers@5.8.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(ts-node@10.9.2(@types/node@20.11.19)(typescript@5.3.3))(typescript@5.3.3)(utf-8-validate@5.0.10)':
+  '@1inch/limit-order-protocol-contract@https://codeload.github.com/1inch/limit-order-protocol/tar.gz/2f08226c2890abba2f35646cbfc07aa7eeabd736(bufferutil@4.0.9)(ethers@5.8.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(ts-node@10.9.2(@types/node@20.11.19)(typescript@5.3.3))(typescript@5.3.3)(utf-8-validate@5.0.10)':
     dependencies:
       '@1inch/solidity-utils': 6.6.0(bufferutil@4.0.9)(ts-node@10.9.2(@types/node@20.11.19)(typescript@5.3.3))(typescript@5.3.3)(utf-8-validate@5.0.10)
       '@chainlink/contracts': 0.8.0(bufferutil@4.0.9)(ethers@5.8.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(utf-8-validate@5.0.10)
@@ -3833,7 +3831,7 @@ snapshots:
     dependencies:
       '@eth-optimism/contracts': 0.5.40(bufferutil@4.0.9)(ethers@6.9.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(utf-8-validate@5.0.10)
       '@openzeppelin/contracts': 4.3.3
-      '@openzeppelin/contracts-upgradeable': 4.9.6
+      '@openzeppelin/contracts-upgradeable': 4.7.3
       '@openzeppelin/contracts-v0.7': '@openzeppelin/contracts@3.4.2'
     transitivePeerDependencies:
       - bufferutil
@@ -4783,8 +4781,6 @@ snapshots:
       '@nomicfoundation/solidity-analyzer-win32-x64-msvc': 0.1.2
 
   '@openzeppelin/contracts-upgradeable@4.7.3': {}
-
-  '@openzeppelin/contracts-upgradeable@4.9.6': {}
 
   '@openzeppelin/contracts@3.4.2': {}
 
@@ -7263,7 +7259,7 @@ snapshots:
 
   rimraf@2.7.1:
     dependencies:
-      glob: 7.2.0
+      glob: 7.2.3
 
   ripemd160@2.0.3:
     dependencies:

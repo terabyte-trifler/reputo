@@ -80,6 +80,37 @@ contract LendingPool is Ownable {
         return debtBalance[user] > thresh;
     }
 
+    // ADD: view for the agent/watcher (1e18-scaled)
+function getHealthFactor(address user) external view returns (uint256 hf1e18) {
+    uint256 debt = debtBalance[user];
+    if (debt == 0) return type(uint256).max; // no debt == super safe
+    uint256 value = valueOfCollateral(user);
+    // HF = (value * liqThreshold) / debt
+    //   - if HF < 1e18 -> at risk
+    //   - if HF ~ 1.05e18 -> 105% of liq threshold, etc.
+    uint256 thresholded = (value * liqThresholdBps) / 10_000;
+    return (thresholded * 1e18) / debt;
+}
+
+// ADD: anyone can repay anyone's loan (Aave-like)
+function repayOnBehalf(address borrower, uint256 amount) external {
+    require(amount > 0, "amount");
+    uint256 repayAmt = amount > debtBalance[borrower] ? debtBalance[borrower] : amount;
+
+    // pull stablecoins from msg.sender (the agent)
+    debtAsset.safeTransferFrom(msg.sender, address(this), repayAmt);
+
+    // reduce borrower's debt
+    debtBalance[borrower] -= repayAmt;
+    emit Repay(borrower, repayAmt);
+
+    if (address(occr) != address(0)) {
+        // treat as a positive repayment event for the borrower
+        occr.onRepay(borrower);
+    }
+}
+
+
     // --- actions ---
     function deposit(uint256 amount) external {
         require(amount > 0, "amount");
