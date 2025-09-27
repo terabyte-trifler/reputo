@@ -19,7 +19,7 @@
  *    pnpm exec ts-node scripts/deploy_direct.ts --network sepolia
  *
 */
-
+/// <reference types="hardhat" />
 import fs from "node:fs";
 import path from "node:path";
 import dotenv from "dotenv";
