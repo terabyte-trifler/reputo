@@ -25,6 +25,8 @@
   },
   "dependencies": {
     "@openzeppelin/contracts": "5.0.2",
-    "ethers": "^6.15.0"
+    "aptos": "^1.21.0",
+    "axios": "^1.12.2",
+    "ethers": "^5.8.0"
   }
 }
