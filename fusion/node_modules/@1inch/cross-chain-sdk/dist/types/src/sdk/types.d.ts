@@ -1,0 +1,68 @@
+import { BlockchainProviderConnector, HttpProviderConnector, LimitOrderV4Struct } from '@1inch/fusion-sdk';
+import { ResolverCancellationConfig, SvmCrossChainOrder, EvmCrossChainOrder } from '../cross-chain-order/index.js';
+import { CustomPreset, PresetEnum } from '../api/index.js';
+import { SupportedChain } from '../chains.js';
+import { HashLock, SolanaAddress } from '../domains/index.js';
+export type CrossChainSDKConfigParams = {
+    url: string;
+    authKey?: string;
+    blockchainProvider?: BlockchainProviderConnector;
+    httpProvider?: HttpProviderConnector;
+};
+export type QuoteParams<SrcChain extends SupportedChain = SupportedChain, DstChain extends SupportedChain = SupportedChain> = {
+    srcChainId: SrcChain;
+    dstChainId: DstChain;
+    srcTokenAddress: string;
+    dstTokenAddress: string;
+    amount: string;
+    walletAddress: string;
+    enableEstimate?: boolean;
+    permit?: string;
+    takingFeeBps?: number;
+    source?: string;
+    isPermit2?: boolean;
+};
+export type QuoteCustomPresetParams = {
+    customPreset: CustomPreset;
+};
+export type OrderParams = {
+    walletAddress: string;
+    hashLock: HashLock;
+    secretHashes: string[];
+    permit?: string;
+    receiver?: string;
+    preset?: PresetEnum;
+    /**
+     * Unique for `walletAddress` can be serial or random generated
+     *
+     * @see randBigInt
+     */
+    nonce?: bigint;
+    fee?: TakingFeeInfo;
+    source?: string;
+    isPermit2?: boolean;
+    customPreset?: CustomPreset;
+};
+export type TakingFeeInfo = {
+    takingFeeBps: number;
+    takingFeeReceiver: string;
+};
+export type OrderInfo = {
+    order: LimitOrderV4Struct;
+    signature: string;
+    quoteId: string;
+    orderHash: string;
+    extension: string;
+};
+export type PreparedOrder = {
+    order: EvmCrossChainOrder | SvmCrossChainOrder;
+    hash: string;
+    quoteId: string;
+};
+export type SolanaOrderCancellationData = {
+    orderHash: Buffer;
+    maker: SolanaAddress;
+    token: SolanaAddress;
+    cancellationConfig: ResolverCancellationConfig;
+    isAssetNative: boolean;
+};
