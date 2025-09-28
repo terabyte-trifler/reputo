@@ -1,5 +1,9 @@
 // hardhat.config.ts — plugin must be a static top-level import
 import "@nomicfoundation/hardhat-ethers";
+import "@nomicfoundation/hardhat-ethers";
+// OR if you installed toolbox:
+// import "@nomicfoundation/hardhat-toolbox";
+
 
 import { HardhatUserConfig } from "hardhat/config";
 import * as dotenv from "dotenv";

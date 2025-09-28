@@ -1,6 +1,8 @@
 /// <reference types="hardhat" />
 import hre from "hardhat";
 import fs from "node:fs";
+import "dotenv/config";
+
 import path from "node:path";
 import type { Signer } from "ethers";
 

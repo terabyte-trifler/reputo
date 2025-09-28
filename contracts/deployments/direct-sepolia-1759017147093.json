@@ -1,0 +1,10 @@
+{
+  "network": "sepolia",
+  "rpc": "https://eth-sepolia.g.alchemy.com/v2/8t4NVriyhfgD8I8Tqu-TtYfmcrYT9Zak",
+  "deployer": "0x5A9BD73AA4792607773942A60317e8D547eb20C5",
+  "cWETH": "0x51099d1BfFaef1e0b4753b372E074671f00B0675",
+  "tUSDC": "0x2Eba41ffAcAa5E5F33c258c64086938080eFe05E",
+  "IdentityVerifier": "0xBe6D60A94E3bfC0abDAABC8356102586944FB92B",
+  "OCCRScore": "0x52A9ECe7b381e8e7a43B6E1862Cbc2f060Dbc849",
+  "LendingPool": "0x924F6CA4C1c79C5a1f8278f5142175d31ABFeF63"
+}

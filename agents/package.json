@@ -1,10 +1,16 @@
 {
   "name": "agents",
-  "version": "0.1.0",
-  "type": "commonjs",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
   "scripts": {
-    "dev": "ts-node src/watcher.ts",
-    "build": "tsc -p .",
-    "start": "node dist/watcher.js"
+    "start": "ts-node --esm payFeeAndStart.ts"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "ethers": "^6.15.0",
+    "node-fetch": "^3.3.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
   }
 }

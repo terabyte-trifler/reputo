@@ -4,24 +4,16 @@ pragma solidity ^0.8.24;
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 
 contract IdentityVerifier is Ownable {
-    mapping(address => bool) private _verified;
+    mapping(address => bool) public isVerified;
 
-    event UserVerified(address indexed user, bool status);
+    event UserVerified(address indexed user, bool verified);
 
     constructor() Ownable(msg.sender) {}
 
-    // Day 5: replace this with Self zk verification call.
-    function verifyIdentity(bytes calldata /*zkProof*/) external {
-        _verified[msg.sender] = true;
-        emit UserVerified(msg.sender, true);
-    }
-
-    function adminSetVerified(address user, bool ok) external onlyOwner {
-        _verified[user] = ok;
-        emit UserVerified(user, ok);
-    }
-
-    function isVerified(address user) external view returns (bool) {
-        return _verified[user];
+    // TEMP for hackathon Day-2: admin toggles a user as verified.
+    // Day-5 will replace this with Self Protocol proof-based verification.
+    function adminSetVerified(address user, bool verified) external onlyOwner {
+        isVerified[user] = verified;
+        emit UserVerified(user, verified);
     }
 }
